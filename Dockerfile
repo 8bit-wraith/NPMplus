@@ -112,4 +112,4 @@ COPY --from=crowdsec /src/crowdsec-nginx-bouncer/lua-mod/lib/crowdsec.lua       
 COPY --from=crowdsec /src/crowdsec-nginx-bouncer/lua-mod/lib/plugins            /usr/local/nginx/lib/lua/plugins
 
 ENTRYPOINT ["tini", "--", "entrypoint.sh"]
-HEALTHCHECK CMD healthcheck.sh
+HEALTHCHECK CMD ["healthcheck.sh"]

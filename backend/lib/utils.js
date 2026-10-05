@@ -1,6 +1,6 @@
 const _ = require('lodash');
 const fs = require('fs');
-const crypto = require('crypto');
+const environmentHash = require('./env-hash');
 const execFile = require('node:child_process').execFile;
 const { Liquid } = require('liquidjs');
 const logger = require('../logger').global;
@@ -8,17 +8,7 @@ const error = require('./error');
 
 module.exports = {
 	writeHash: () => {
-		const envVars = fs.readdirSync('/app/templates').flatMap((file) => {
-			const content = fs.readFileSync('/app/templates/' + file, 'utf8');
-			const matches = content.match(/env\.[A-Z0-9_]+/g) || [];
-			return matches.map((match) => match.replace('env.', ''));
-		});
-		const uniqueEnvVars =
-			[...new Set(envVars)]
-				.sort()
-				.map((varName) => process.env[varName])
-				.join('') + process.env.TV;
-		const hash = crypto.createHash('sha512').update(uniqueEnvVars).digest('hex');
+		const hash = environmentHash();
 		fs.writeFileSync('/data/npmplus/env.sha512sum', hash);
 	},
 

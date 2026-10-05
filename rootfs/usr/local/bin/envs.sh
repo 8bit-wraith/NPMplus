@@ -569,7 +569,8 @@ fi
 
 
 export TV="5a"
-if [ ! -s /data/npmplus/env.sha512sum ] || [ "$(cat /data/npmplus/env.sha512sum)" != "$( (grep "env\.[A-Z0-9_]\+" -roh /app/templates | sed "s|env.||g" | sort | uniq | xargs printenv; echo "$TV") | tr -d "\n" | sha512sum | cut -d" " -f1)" ]; then
+current_env_hash="$(node /app/lib/env-hash.js)" || exit 1
+if [ ! -s /data/npmplus/env.sha512sum ] || [ "$(cat /data/npmplus/env.sha512sum)" != "$current_env_hash" ]; then
     echo "At least one env or the template version changed, all hosts will be regenerated."
     export REGENERATE_ALL="true"
 fi

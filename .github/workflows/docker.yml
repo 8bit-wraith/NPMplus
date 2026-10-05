@@ -21,6 +21,8 @@ on:
   workflow_dispatch:
 jobs:
   build:
+    # This job publishes to the upstream registry, including on pull requests.
+    if: github.repository == 'ZoeyVid/NPMplus'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

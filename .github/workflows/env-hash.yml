@@ -1,0 +1,28 @@
+name: Environment hash tests
+on:
+  push:
+    paths:
+      - backend/lib/env-hash.js
+      - backend/lib/utils.js
+      - backend/test/env-hash.test.js
+      - rootfs/usr/local/bin/envs.sh
+      - .github/workflows/env-hash.yml
+  pull_request:
+    paths:
+      - backend/lib/env-hash.js
+      - backend/lib/utils.js
+      - backend/test/env-hash.test.js
+      - rootfs/usr/local/bin/envs.sh
+      - .github/workflows/env-hash.yml
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check hash behavior and writer integration
+        run: node --test backend/test/env-hash.test.js
+      - name: Check shell syntax
+        run: sh -n rootfs/usr/local/bin/envs.sh
